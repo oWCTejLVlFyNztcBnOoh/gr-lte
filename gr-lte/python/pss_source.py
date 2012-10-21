@@ -70,13 +70,13 @@ class pss_source_td(gr.hier_block2):
       self.connect(self.cp, self)
 
 
-def gen_pss_td(N_id_2, N_re=128, N_cp_ts=144, freq_corr=0):
-  top = gr.top_block("foo");
-  pss_src_td = pss_source_td(N_id_2, N_re, N_cp_ts, freq_corr)
-  sink = gr.vector_sink_c(1)
-  top.connect(pss_src_td, sink)
-  top.run()
-  return sink.data()
+#def gen_pss_td(N_id_2, N_re=128, N_cp_ts=144, freq_corr=0):
+#  top = gr.top_block("foo");
+#  pss_src_td = pss_source_td(N_id_2, N_re, N_cp_ts, freq_corr)
+#  sink = gr.vector_sink_c(1)
+#  top.connect(pss_src_td, sink)
+#  top.run()
+#  return sink.data()
   
 
 class gen_pss_td:
