@@ -1,6 +1,6 @@
 addpath ('/home/user/projects/openlte-code/octave')
 addpath("/home/user/projects/gnuradio/gnuradio-core/src/utils/")
-in=read_complex_binary('../capture/lte_02_796m_30720k_frame.cfile');
+in=read_complex_binary('/home/user/git/gr-lte/gr-lte/test/traces/lte_02_796m_30720k_frame.cfile');
 % frame start: 301104 Ts
 % PSS: 7th symbol 1st slot: 7072 Ts
 lte_fdd_dl_receive(c)
