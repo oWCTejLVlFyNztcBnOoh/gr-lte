@@ -9,6 +9,7 @@ from gnuradio.gr import firdes
 from optparse import OptionParser
 from pss_corr import *  
 from sss_corr import *
+from symbol_source import *
 from lte_dl_ss_source import *   
 import logging
 
@@ -58,15 +59,15 @@ class lte_cell_scan:
 		top = gr.top_block("input reader graph")
 		top.connect(file_source, decim_lowpass, sink)
 		if dump != None:
-			file_sink = gr.file_sink(gr.sizeof_gr_complex, self.dump + "_input.cfile")
-			top.connect(decim_lowpass, file_sink)
+			top.connect(decim_lowpass, gr.file_sink(gr.sizeof_gr_complex, self.dump + "_input.cfile"))
 		top.run()
-		logging.debug("No. samples to process: {}".format(len(sink.data()))) 
+		self.buffer = sink.data()
 		
+		logging.debug("No. samples to process: {}".format(len(self.buffer))) 
 		if -1 == self.avg_frames:
-			self.avg_frames = int(floor(len(sink.data()) / vec_half_frame / 2))
+			self.avg_frames = int(floor(len(self.buffer) / vec_half_frame / 2))
 		logging.debug("Config: decim {}, avg_frames {}, freq_corr {}".format(self.decim, self.avg_frames, self.freq_corr)) 
-		self.source = gr.vector_source_c(sink.data())
+		self.source = gr.vector_source_c(self.buffer)
 		
 
 	def scan(self):
@@ -95,9 +96,29 @@ class lte_cell_scan:
 		return ret
 			
 
-	def correlate_sss(self, N_id_2, frame_time, pss_peak):
-		# TODO ofdm_receiver.py
+	def correlate_sss(self, N_id_2, pss_peak_time, pss_peak):
+		frame_time = pss_peak_time - (160+144*6+2048*7)
+		if frame_time < 0:
+			frame_time += 30720*5
 		logging.debug("Searching for SSS: N_id_2 {}, frame time {:5.0f}, corr peak {:7.0f}".format(N_id_2, frame_time, pss_peak))
+		
+		fft_size = 2048/self.decim
+		top = gr.top_block("pss corr graph")
+		symbol_mask = numpy.zeros(20*7)
+		symbol_mask[5:7] = 1
+		symbol_mask[75:77] = 1
+		source = symbol_source(self.buffer, self.decim, symbol_mask, frame_time)
+		to_vec = gr.stream_to_vector(gr.sizeof_gr_complex, fft_size)
+		fft = gr.fft_vcc(fft_size, False, window.blackmanharris(1024))
+		top.connect(source, to_vec, fft)
+
+		if self.dump != None:
+			top.connect(source, gr.file_sink(gr.sizeof_gr_complex, self.dump + "_pss{}_sss_in.cfile".format(N_id_2)))
+			top.connect(fft, gr.file_sink(gr.sizeof_gr_complex*fft_size, self.dump + "_pss{}_sss_fd.cfile".format(N_id_2)))
+
+		top.run()
+
+		# TODO ofdm_receiver.py
 		#self.gr_vector_sink_sss10 = gr.vector_sink_i(1)
 		#self.gr_vector_sink_sss0 = gr.vector_sink_i(1)
 		#self.any_0_0_0 = sss_corr(N_id_1,N_id_2,False, decim, avg_frames,freq_corr)
@@ -121,7 +142,9 @@ if __name__ == '__main__':
 	parser.add_option("", "--dump", dest="dump", type="string", default=None,
 		help="dump intermediate results [default=%default]")
 	(options, args) = parser.parse_args()
-	logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
+	#logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
+	logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', level=logging.DEBUG)
+	logging.getLogger('symbol_source').setLevel(logging.WARN)
 	tb = lte_cell_scan(decim=options.decim, avg_frames=options.avg_frames, freq_corr=options.freq_corr, file_name=options.file_name, dump=options.dump)
 	tb.scan()
 

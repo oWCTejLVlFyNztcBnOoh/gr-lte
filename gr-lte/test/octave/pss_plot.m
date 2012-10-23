@@ -17,3 +17,8 @@ idx = [0:length(pss_corr_add)-1]*decim;
 plot(idx, pss_corr_add);
 
 figure;plot(idx,pss_corr_add/max(pss_corr_add), idx,abs(in(1:length(pss_corr_add))));
+
+sss0_fd = read_complex_binary([data_path prefix '_pss0_sss_fd.cfile']);
+
+figure; plot(sss0_fd(1:128), 'x');
+figure; plot(sss0_fd(129:256), 'x');
