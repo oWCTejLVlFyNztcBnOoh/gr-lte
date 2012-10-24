@@ -5,6 +5,35 @@ from numpy import cos, sin
 from gnuradio import gr, window, digital
 from gnuradio.extras import block_gateway
 
+class gen_pss_fd:
+  def __init__(self,N_id_2, N_re=128, Shift=True):
+    if N_id_2 == 0:
+        root_idx = 25
+    elif N_id_2 == 1:
+        root_idx = 29
+    else:
+        root_idx = 34
+
+    pss = numpy.zeros(62,numpy.complex)
+    for i in range(0,31):
+        pss[i] = numpy.complex(cos(-numpy.pi*root_idx*i*(i+1)/63), sin(-numpy.pi*root_idx*i*(i+1)/63))
+    for i in range(31,62):
+        pss[i] = numpy.complex(cos(-numpy.pi*root_idx*(i+1)*(i+2)/63), sin(-numpy.pi*root_idx*(i+1)*(i+2)/63))
+
+    pss_fd = numpy.zeros(N_re,numpy.complex)
+    if Shift:
+      pss_fd[1:32] = pss[31:62]
+      pss_fd[N_re-31:] = pss[0:31]
+    else:
+      k = int((N_re)/2 - 31)
+      pss_fd[k:k+62] = pss
+  
+    self.data = pss_fd
+    
+  def get_data(self):
+    return (self.data)
+
+
 class pss_source_fd(gr.hier_block2):
     """
     Creates a PSS symbol in the frequency domain
@@ -16,34 +45,11 @@ class pss_source_fd(gr.hier_block2):
           gr.io_signature(0, 0, 0),
           gr.io_signature(1, 1, gr.sizeof_gr_complex*N_re),
       )
-      self.N_re = N_re
 
-      pss = self.generate_pss(N_id_2)
-      pss_fd = numpy.zeros(self.N_re,numpy.complex)
-      pss_fd[1:32] = pss[31:62]
-      pss_fd[self.N_re-31:] = pss[0:31]
-
-      self.source = gr.vector_source_c(range(0,self.N_re), repeat, self.N_re)
-      self.source.set_data(pss_fd);
+      self.source = gr.vector_source_c(range(0, N_re), repeat, N_re)
+      self.source.set_data(gen_pss_fd(N_id_2, N_re).get_data())
       self.connect(self.source, self)
       
-    
-    def generate_pss(self,N_id_2):
-        if N_id_2 == 0:
-            root_idx = 25
-        elif N_id_2 == 1:
-            root_idx = 29
-        else:
-            root_idx = 34
-    
-        pss = numpy.zeros(62,numpy.complex)
-        for i in range(0,31):
-            pss[i] = numpy.complex(cos(-numpy.pi*root_idx*i*(i+1)/63), sin(-numpy.pi*root_idx*i*(i+1)/63))
-        for i in range(31,62):
-            pss[i] = numpy.complex(cos(-numpy.pi*root_idx*(i+1)*(i+2)/63), sin(-numpy.pi*root_idx*(i+1)*(i+2)/63))
-            
-        return (pss)
-
 
 class pss_source_td(gr.hier_block2):
   """

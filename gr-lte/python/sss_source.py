@@ -4,6 +4,7 @@ import numpy
 from numpy import *
 from gnuradio import gr, window, digital
 from gnuradio.extras import block_gateway
+import logging
 
 
 class gen_sss_fd:
@@ -11,9 +12,13 @@ class gen_sss_fd:
   Calculate the SSS in the frequency domain.
   """
   def __init__(self, N_id_1, N_id_2, N_re):
+    logger = logging.getLogger('gen_sss_fd')
+    
     self.N_id_1 = N_id_1
     self.N_id_2 = N_id_2
     (sss0, sss10) = self.generate(N_id_1, N_id_2)
+    logger.debug(sss0)
+    logger.debug(sss10)
     
     k = int((N_re)/2 - 31)
     self.sss0 = numpy.zeros(N_re,numpy.complex)
@@ -100,6 +105,7 @@ class gen_sss_td:
       top.connect(cp, sink)
     top.run()
     self.data = sink.data()
+    
     
   def get_data(self):
     return self.data

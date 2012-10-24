@@ -89,11 +89,15 @@ class lte_cell_scan:
 			top.connect(self.source, corr[N_id_2], sink_pss[N_id_2])
 		top.run()
 		ret = []
+		maxi = (0,0,0)
 		for N_id_2 in range(0,3):
 			pss_res = sink_pss[N_id_2].data()
 			for i in range(0, len(pss_res)/2): 
 				ret += [(N_id_2, pss_res[2*i], pss_res[2*i+1])]
-		return ret
+				if maxi[2] < pss_res[2*i+1]:
+					maxi = (N_id_2, pss_res[2*i], pss_res[2*i+1])
+		#return ret
+		return [maxi]
 			
 
 	def correlate_sss(self, N_id_2, pss_peak_time, pss_peak):
@@ -109,7 +113,7 @@ class lte_cell_scan:
 		symbol_mask[75:77] = 1
 		source = symbol_source(self.buffer, self.decim, symbol_mask, frame_time)
 		to_vec = gr.stream_to_vector(gr.sizeof_gr_complex, fft_size)
-		fft = gr.fft_vcc(fft_size, False, window.blackmanharris(1024))
+		fft = gr.fft_vcc(fft_size, True, window.blackmanharris(1024), True)
 		top.connect(source, to_vec, fft)
 
 		if self.dump != None:
@@ -117,16 +121,6 @@ class lte_cell_scan:
 			top.connect(fft, gr.file_sink(gr.sizeof_gr_complex*fft_size, self.dump + "_pss{}_sss_fd.cfile".format(N_id_2)))
 
 		top.run()
-
-		# TODO ofdm_receiver.py
-		#self.gr_vector_sink_sss10 = gr.vector_sink_i(1)
-		#self.gr_vector_sink_sss0 = gr.vector_sink_i(1)
-		#self.any_0_0_0 = sss_corr(N_id_1,N_id_2,False, decim, avg_frames,freq_corr)
-		#self.any_0_0 = sss_corr(N_id_1,N_id_2,True, decim, avg_frames,freq_corr)
-		#if logging:
-		#	self.connect(self.chan_filt, gr.file_sink(gr.sizeof_gr_complex, "ofdm_receiver-chan_filt_c.dat"))
-
-		pass
 
 
 if __name__ == '__main__':
@@ -145,6 +139,7 @@ if __name__ == '__main__':
 	#logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
 	logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', level=logging.DEBUG)
 	logging.getLogger('symbol_source').setLevel(logging.WARN)
+	logging.getLogger('gen_sss_fd').setLevel(logging.WARN)
 	tb = lte_cell_scan(decim=options.decim, avg_frames=options.avg_frames, freq_corr=options.freq_corr, file_name=options.file_name, dump=options.dump)
 	tb.scan()
 
