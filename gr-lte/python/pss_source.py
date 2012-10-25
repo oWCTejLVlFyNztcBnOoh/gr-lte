@@ -97,6 +97,9 @@ class gen_pss_td:
   def get_data(self):
     return self.data
   
+  def get_data_conj(self):
+    return numpy.conjugate(self.data) 
+  
   def get_data_conj_rev(self):
     return numpy.conjugate(self.data[::-1]) 
 
