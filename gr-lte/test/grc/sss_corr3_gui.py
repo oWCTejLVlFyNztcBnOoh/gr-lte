@@ -2,7 +2,7 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Sss Corr3 Gui
-# Generated: Thu Oct 25 22:45:22 2012
+# Generated: Thu Oct 25 23:24:07 2012
 ##################################################
 
 execfile("/home/user/.grc_gnuradio/pss_chan_est.py")
@@ -93,7 +93,7 @@ class sss_corr3_gui(grc_wxgui.top_block_gui):
 			proportion=1,
 		)
 		self.Add(_noise_level_sizer)
-		self.wxgui_scopesink2_0 = scopesink2.scope_sink_c(
+		self.wxgui_scopesink2_0_1 = scopesink2.scope_sink_f(
 			self.GetWin(),
 			title="Scope Plot",
 			sample_rate=samp_rate,
@@ -102,29 +102,47 @@ class sss_corr3_gui(grc_wxgui.top_block_gui):
 			t_scale=0,
 			ac_couple=False,
 			xy_mode=False,
-			num_inputs=2,
+			num_inputs=3,
 			trig_mode=gr.gr_TRIG_MODE_AUTO,
 			y_axis_label="Counts",
 		)
-		self.Add(self.wxgui_scopesink2_0.win)
+		self.Add(self.wxgui_scopesink2_0_1.win)
 		self.pss_chan_est_0 = pss_chan_est(
 			decim=16,
 			N_id_2=0,
 			is_input_td=0,
 		)
 		self.gr_vector_to_stream_1 = gr.vector_to_stream(gr.sizeof_gr_complex*1, fft_size)
-		self.gr_vector_to_stream_0_1_0 = gr.vector_to_stream(gr.sizeof_gr_complex*1, fft_size)
-		self.gr_vector_to_stream_0_1 = gr.vector_to_stream(gr.sizeof_gr_complex*1, fft_size)
+		self.gr_vector_to_stream_0_2_0 = gr.vector_to_stream(gr.sizeof_gr_complex*1, fft_size)
+		self.gr_vector_to_stream_0_2 = gr.vector_to_stream(gr.sizeof_float*1, fft_size)
+		self.gr_vector_to_stream_0_0 = gr.vector_to_stream(gr.sizeof_gr_complex*1, fft_size)
+		self.gr_vector_to_stream_0 = gr.vector_to_stream(gr.sizeof_gr_complex*1, fft_size)
+		self.gr_vector_source_x_0_1 = gr.vector_source_c((gen_sss_fd( N_id_1, N_id_2, fft_size).get_sss(False)), True, fft_size)
+		self.gr_vector_source_x_0_0_1 = gr.vector_source_c((gen_pss_fd(N_id_2, fft_size, False).get_data()), True, fft_size)
+		self.gr_vector_source_x_0_0_0_0 = gr.vector_source_c((gen_sss_fd(N_id_1,N_id_2, fft_size).get_sss(False)), True, fft_size)
+		self.gr_vector_source_x_0_0_0 = gr.vector_source_c((gen_sss_fd(N_id_1,N_id_2, fft_size).get_sss(True)), True, fft_size)
 		self.gr_vector_source_x_0_0 = gr.vector_source_c((gen_pss_fd(N_id_2, fft_size, False).get_data()), True, fft_size)
 		self.gr_vector_source_x_0 = gr.vector_source_c((gen_sss_fd( N_id_1, N_id_2, fft_size).get_sss(True)), True, fft_size)
+		self.gr_sub_xx_0 = gr.sub_cc(fft_size)
+		self.gr_stream_to_vector_1_0 = gr.stream_to_vector(gr.sizeof_gr_complex*1, fft_size)
+		self.gr_stream_to_vector_1 = gr.stream_to_vector(gr.sizeof_gr_complex*1, fft_size)
 		self.gr_stream_to_vector_0 = gr.stream_to_vector(gr.sizeof_gr_complex*1, fft_size)
-		self.gr_null_sink_0_0_0 = gr.null_sink(gr.sizeof_gr_complex*1)
+		self.gr_repeat_0 = gr.repeat(gr.sizeof_gr_complex*1, fft_size)
 		self.gr_null_sink_0_0 = gr.null_sink(gr.sizeof_gr_complex*1)
+		self.gr_multiply_xx_2 = gr.multiply_vcc(fft_size)
 		self.gr_multiply_xx_1 = gr.multiply_vcc(fft_size)
+		self.gr_multiply_xx_0 = gr.multiply_vcc(fft_size)
+		self.gr_multiply_const_vxx_1 = gr.multiply_const_vff((1e-3, ))
+		self.gr_interleave_1 = gr.interleave(gr.sizeof_gr_complex*fft_size)
 		self.gr_interleave_0 = gr.interleave(gr.sizeof_gr_complex*fft_size)
+		self.gr_integrate_xx_0 = gr.integrate_cc(fft_size)
 		self.gr_fft_vxx_1 = gr.fft_vcc(fft_size, False, (window.blackmanharris(1024)), True, 1)
 		self.gr_fft_vxx_0 = gr.fft_vcc(fft_size, True, (window.blackmanharris(1024)), True, 1)
 		self.gr_deinterleave_0 = gr.deinterleave(gr.sizeof_gr_complex*fft_size)
+		self.gr_conjugate_cc_1 = gr.conjugate_cc()
+		self.gr_conjugate_cc_0 = gr.conjugate_cc()
+		self.gr_complex_to_mag_squared_0 = gr.complex_to_mag_squared(fft_size)
+		self.gr_complex_to_float_0 = gr.complex_to_float(1)
 		self.gr_channel_model_0 = gr.channel_model(
 			noise_voltage=0.005*noise_level,
 			frequency_offset=0.0,
@@ -136,9 +154,6 @@ class sss_corr3_gui(grc_wxgui.top_block_gui):
 		##################################################
 		# Connections
 		##################################################
-		self.connect((self.gr_stream_to_vector_0, 0), (self.gr_fft_vxx_0, 0))
-		self.connect((self.gr_fft_vxx_0, 0), (self.gr_deinterleave_0, 0))
-		self.connect((self.gr_channel_model_0, 0), (self.gr_stream_to_vector_0, 0))
 		self.connect((self.gr_vector_to_stream_1, 0), (self.gr_channel_model_0, 0))
 		self.connect((self.gr_vector_source_x_0_0, 0), (self.gr_interleave_0, 0))
 		self.connect((self.gr_fft_vxx_1, 0), (self.gr_vector_to_stream_1, 0))
@@ -147,12 +162,36 @@ class sss_corr3_gui(grc_wxgui.top_block_gui):
 		self.connect((self.gr_deinterleave_0, 0), (self.pss_chan_est_0, 0))
 		self.connect((self.pss_chan_est_0, 0), (self.gr_multiply_xx_1, 1))
 		self.connect((self.gr_deinterleave_0, 1), (self.gr_multiply_xx_1, 0))
-		self.connect((self.gr_multiply_xx_1, 0), (self.gr_vector_to_stream_0_1, 0))
-		self.connect((self.gr_vector_to_stream_0_1, 0), (self.wxgui_scopesink2_0, 0))
-		self.connect((self.gr_vector_to_stream_0_1_0, 0), (self.wxgui_scopesink2_0, 1))
-		self.connect((self.gr_deinterleave_0, 1), (self.gr_vector_to_stream_0_1_0, 0))
-		self.connect((self.gr_vector_to_stream_0_1, 0), (self.gr_null_sink_0_0_0, 0))
 		self.connect((self.gr_channel_model_0, 0), (self.gr_null_sink_0_0, 0))
+		self.connect((self.gr_vector_source_x_0_0_0, 0), (self.gr_interleave_1, 0))
+		self.connect((self.gr_vector_source_x_0_0_0_0, 0), (self.gr_interleave_1, 1))
+		self.connect((self.gr_multiply_xx_1, 0), (self.gr_vector_to_stream_0, 0))
+		self.connect((self.gr_vector_to_stream_0, 0), (self.gr_conjugate_cc_0, 0))
+		self.connect((self.gr_conjugate_cc_0, 0), (self.gr_stream_to_vector_1, 0))
+		self.connect((self.gr_interleave_1, 0), (self.gr_multiply_xx_0, 0))
+		self.connect((self.gr_stream_to_vector_1, 0), (self.gr_multiply_xx_0, 1))
+		self.connect((self.gr_multiply_xx_0, 0), (self.gr_vector_to_stream_0_0, 0))
+		self.connect((self.gr_vector_to_stream_0_0, 0), (self.gr_integrate_xx_0, 0))
+		self.connect((self.gr_integrate_xx_0, 0), (self.gr_repeat_0, 0))
+		self.connect((self.gr_repeat_0, 0), (self.gr_conjugate_cc_1, 0))
+		self.connect((self.gr_conjugate_cc_1, 0), (self.gr_stream_to_vector_1_0, 0))
+		self.connect((self.gr_multiply_xx_2, 0), (self.gr_sub_xx_0, 0))
+		self.connect((self.gr_stream_to_vector_1_0, 0), (self.gr_multiply_xx_2, 1))
+		self.connect((self.gr_interleave_1, 0), (self.gr_multiply_xx_2, 0))
+		self.connect((self.gr_multiply_xx_1, 0), (self.gr_sub_xx_0, 1))
+		self.connect((self.gr_sub_xx_0, 0), (self.gr_complex_to_mag_squared_0, 0))
+		self.connect((self.gr_complex_to_mag_squared_0, 0), (self.gr_vector_to_stream_0_2, 0))
+		self.connect((self.gr_vector_to_stream_0_2_0, 0), (self.gr_complex_to_float_0, 0))
+		self.connect((self.gr_complex_to_float_0, 0), (self.wxgui_scopesink2_0_1, 0))
+		self.connect((self.gr_complex_to_float_0, 1), (self.wxgui_scopesink2_0_1, 1))
+		self.connect((self.gr_vector_to_stream_0_2, 0), (self.gr_multiply_const_vxx_1, 0))
+		self.connect((self.gr_multiply_const_vxx_1, 0), (self.wxgui_scopesink2_0_1, 2))
+		self.connect((self.gr_channel_model_0, 0), (self.gr_stream_to_vector_0, 0))
+		self.connect((self.gr_fft_vxx_0, 0), (self.gr_deinterleave_0, 0))
+		self.connect((self.gr_stream_to_vector_0, 0), (self.gr_fft_vxx_0, 0))
+		self.connect((self.gr_vector_source_x_0_1, 0), (self.gr_interleave_0, 3))
+		self.connect((self.gr_vector_source_x_0_0_1, 0), (self.gr_interleave_0, 2))
+		self.connect((self.gr_multiply_xx_1, 0), (self.gr_vector_to_stream_0_2_0, 0))
 
 	def get_freq_corr(self):
 		return self.freq_corr
@@ -184,8 +223,8 @@ class sss_corr3_gui(grc_wxgui.top_block_gui):
 	def set_decim(self, decim):
 		self.decim = decim
 		self.set_vec_half_frame(30720*5/self.decim)
-		self.set_samp_rate(30720e3/self.decim)
 		self.set_fft_size(2048/self.decim)
+		self.set_samp_rate(30720e3/self.decim)
 
 	def get_vec_half_frame(self):
 		return self.vec_half_frame
@@ -198,7 +237,7 @@ class sss_corr3_gui(grc_wxgui.top_block_gui):
 
 	def set_samp_rate(self, samp_rate):
 		self.samp_rate = samp_rate
-		self.wxgui_scopesink2_0.set_sample_rate(self.samp_rate)
+		self.wxgui_scopesink2_0_1.set_sample_rate(self.samp_rate)
 
 	def get_rot(self):
 		return self.rot
