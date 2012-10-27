@@ -47,7 +47,7 @@ class pss_source_fd(gr.hier_block2):
       )
 
       self.source = gr.vector_source_c(range(0, N_re), repeat, N_re)
-      self.source.set_data(gen_pss_fd(N_id_2, N_re).get_data())
+      self.source.set_data(gen_pss_fd(N_id_2, N_re, False).get_data())
       self.connect(self.source, self)
       
 
@@ -64,7 +64,7 @@ class pss_source_td(gr.hier_block2):
     )
     
     self.pss_fd = pss_source_fd(N_id_2, N_re, repeat);
-    self.fft = gr.fft_vcc(N_re, False, window.blackmanharris(1024), False)
+    self.fft = gr.fft_vcc(N_re, False, window.blackmanharris(1024), True)
     self.cp = digital.ofdm_cyclic_prefixer(N_re, N_re+N_cp_ts*N_re/2048)
     if freq_corr != 0:
       self.freq_corr = gr.freq_xlating_fir_filter_ccf(1, 1, freq_corr, 15000*N_re)

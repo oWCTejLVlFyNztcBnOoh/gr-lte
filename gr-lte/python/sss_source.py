@@ -80,7 +80,7 @@ class gen_sss_fd:
 
     sss_d_u_10 = numpy.zeros(62,numpy.complex)
     sss_d_u_10[0:62:2] = s1_m1 * c0
-    sss_d_u_10[0:62:2] = s0_m0 * c1 * z1_m1 
+    sss_d_u_10[1:62:2] = s0_m0 * c1 * z1_m1 
 
     return (sss_d_u_0,sss_d_u_10)
   

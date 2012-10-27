@@ -17,7 +17,8 @@ class lte_cell_scan:
 	"""
 	Cell scanner for LTE signals
 	
-	concatenate((zeros((160+144*4+2048*5)/decim), gen_sss_td(N_id_1, N_id_2, True, N_re).get_data(), 
+	concatenate((
+	  zeros((160+144*4+2048*5)/decim), gen_sss_td(N_id_1, N_id_2, True, N_re).get_data(), 
 	  gen_pss_td(N_id_2, N_re, 144).get_data(), zeros((30720/2 + 30720*4)/decim), 
 	  zeros((160+144*4+2048*5)/decim), gen_sss_td(N_id_1, N_id_2, False, N_re).get_data(), 
 	  gen_pss_td(N_id_2, N_re, 144).get_data(), zeros((30720/2 + 30720*4)/decim)),1)
@@ -113,12 +114,12 @@ class lte_cell_scan:
 		symbol_mask[75:77] = 1
 		source = symbol_source(self.buffer, self.decim, symbol_mask, frame_time)
 		to_vec = gr.stream_to_vector(gr.sizeof_gr_complex, fft_size)
-		fft = gr.fft_vcc(fft_size, True, window.blackmanharris(1024), True)
-		top.connect(source, to_vec, fft)
+		#fft = gr.fft_vcc(fft_size, True, window.blackmanharris(1024), True)
+		#top.connect(source, to_vec, fft)
 
 		if self.dump != None:
 			top.connect(source, gr.file_sink(gr.sizeof_gr_complex, self.dump + "_pss{}_sss_in.cfile".format(N_id_2)))
-			top.connect(fft, gr.file_sink(gr.sizeof_gr_complex*fft_size, self.dump + "_pss{}_sss_fd.cfile".format(N_id_2)))
+			#top.connect(fft, gr.file_sink(gr.sizeof_gr_complex*fft_size, self.dump + "_pss{}_sss_fd.cfile".format(N_id_2)))
 
 		top.run()
 
@@ -138,7 +139,7 @@ if __name__ == '__main__':
 	(options, args) = parser.parse_args()
 	#logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
 	logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', level=logging.DEBUG)
-	logging.getLogger('symbol_source').setLevel(logging.WARN)
+	#logging.getLogger('symbol_source').setLevel(logging.WARN)
 	logging.getLogger('gen_sss_fd').setLevel(logging.WARN)
 	tb = lte_cell_scan(decim=options.decim, avg_frames=options.avg_frames, freq_corr=options.freq_corr, file_name=options.file_name, dump=options.dump)
 	tb.scan()
