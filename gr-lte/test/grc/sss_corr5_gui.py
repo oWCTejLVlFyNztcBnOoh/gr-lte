@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 ##################################################
 # Gnuradio Python Flow Graph
-# Title: Sss Corr3 Gui
-# Generated: Sat Oct 27 20:10:40 2012
+# Title: Sss Corr5 Gui
+# Generated: Sat Oct 27 20:22:26 2012
 ##################################################
 
 execfile("/home/user/.grc_gnuradio/sss_corr3_gui.py")
@@ -22,10 +22,10 @@ from pss_corr import *
 from sss_corr import *   
 import wx
 
-class sss_corr3_gui(grc_wxgui.top_block_gui):
+class sss_corr5_gui(grc_wxgui.top_block_gui):
 
 	def __init__(self, freq_corr=0, avg_frames=1, N_id_2=0, N_id_1=134, decim=16):
-		grc_wxgui.top_block_gui.__init__(self, title="Sss Corr3 Gui")
+		grc_wxgui.top_block_gui.__init__(self, title="Sss Corr5 Gui")
 		_icon_path = "/usr/share/icons/hicolor/32x32/apps/gnuradio-grc.png"
 		self.SetIcon(wx.Icon(_icon_path, wx.BITMAP_TYPE_ANY))
 
@@ -98,6 +98,11 @@ class sss_corr3_gui(grc_wxgui.top_block_gui):
 			proportion=1,
 		)
 		self.Add(_rot_sizer)
+		self.notebook_0 = self.notebook_0 = wx.Notebook(self.GetWin(), style=wx.NB_TOP)
+		self.notebook_0.AddPage(grc_wxgui.Panel(self.notebook_0), "SSS ML")
+		self.notebook_0.AddPage(grc_wxgui.Panel(self.notebook_0), "SSS equ")
+		self.notebook_0.AddPage(grc_wxgui.Panel(self.notebook_0), "SSS in")
+		self.Add(self.notebook_0)
 		_noise_level_sizer = wx.BoxSizer(wx.VERTICAL)
 		self._noise_level_text_box = forms.text_box(
 			parent=self.GetWin(),
@@ -121,8 +126,8 @@ class sss_corr3_gui(grc_wxgui.top_block_gui):
 			proportion=1,
 		)
 		self.Add(_noise_level_sizer)
-		self.wxgui_scopesink2_0_1 = scopesink2.scope_sink_f(
-			self.GetWin(),
+		self.wxgui_scopesink2_0_1_0_0 = scopesink2.scope_sink_c(
+			self.notebook_0.GetPage(2).GetWin(),
 			title="Scope Plot",
 			sample_rate=samp_rate,
 			v_scale=0,
@@ -134,9 +139,37 @@ class sss_corr3_gui(grc_wxgui.top_block_gui):
 			trig_mode=gr.gr_TRIG_MODE_AUTO,
 			y_axis_label="Counts",
 		)
-		self.Add(self.wxgui_scopesink2_0_1.win)
+		self.notebook_0.GetPage(2).Add(self.wxgui_scopesink2_0_1_0_0.win)
+		self.wxgui_scopesink2_0_1_0 = scopesink2.scope_sink_c(
+			self.notebook_0.GetPage(1).GetWin(),
+			title="Scope Plot",
+			sample_rate=samp_rate,
+			v_scale=0,
+			v_offset=0,
+			t_scale=0,
+			ac_couple=False,
+			xy_mode=False,
+			num_inputs=1,
+			trig_mode=gr.gr_TRIG_MODE_AUTO,
+			y_axis_label="Counts",
+		)
+		self.notebook_0.GetPage(1).Add(self.wxgui_scopesink2_0_1_0.win)
+		self.wxgui_scopesink2_0_1 = scopesink2.scope_sink_f(
+			self.notebook_0.GetPage(0).GetWin(),
+			title="Scope Plot",
+			sample_rate=100/avg_frames,
+			v_scale=0,
+			v_offset=0,
+			t_scale=0,
+			ac_couple=False,
+			xy_mode=False,
+			num_inputs=1,
+			trig_mode=gr.gr_TRIG_MODE_AUTO,
+			y_axis_label="Counts",
+		)
+		self.notebook_0.GetPage(0).Add(self.wxgui_scopesink2_0_1.win)
 		self.sss_equ_0 = sss_equ(
-			N_id_2=0,
+			N_id_2=N_id_2,
 		)
 		self.sss_corr3_gui_0 = sss_corr3_gui(
 			decim=decim,
@@ -146,6 +179,8 @@ class sss_corr3_gui(grc_wxgui.top_block_gui):
 			slot_0_10=1,
 		)
 		self.gr_vector_to_stream_1 = gr.vector_to_stream(gr.sizeof_gr_complex*1, fft_size)
+		self.gr_vector_to_stream_0_0_0 = gr.vector_to_stream(gr.sizeof_gr_complex*1, N_re)
+		self.gr_vector_to_stream_0_0 = gr.vector_to_stream(gr.sizeof_gr_complex*1, N_re)
 		self.gr_vector_to_stream_0 = gr.vector_to_stream(gr.sizeof_gr_complex*1, fft_size)
 		self.gr_vector_source_x_0_1 = gr.vector_source_c((gen_sss_fd( N_id_1, N_id_2, fft_size).get_sss(False)), True, fft_size)
 		self.gr_vector_source_x_0_0_1 = gr.vector_source_c((gen_pss_fd(N_id_2, fft_size, False).get_data()), True, fft_size)
@@ -176,15 +211,15 @@ class sss_corr3_gui(grc_wxgui.top_block_gui):
 			item_size=gr.sizeof_gr_complex*1,
 			num_inputs=2,
 			num_outputs=1,
-			input_index=1,
+			input_index=0,
 			output_index=0,
 		)
 		self.blks2_selector_0 = grc_blks2.selector(
 			item_size=gr.sizeof_gr_complex*1,
 			num_inputs=3,
 			num_outputs=2,
-			input_index=0,
-			output_index=1,
+			input_index=2,
+			output_index=0,
 		)
 
 		##################################################
@@ -218,6 +253,10 @@ class sss_corr3_gui(grc_wxgui.top_block_gui):
 		self.connect((self.gr_deinterleave_0, 1), (self.sss_equ_0, 0))
 		self.connect((self.sss_corr3_gui_0, 0), (self.wxgui_scopesink2_0_1, 0))
 		self.connect((self.sss_equ_0, 0), (self.sss_corr3_gui_0, 0))
+		self.connect((self.gr_vector_to_stream_0_0, 0), (self.wxgui_scopesink2_0_1_0, 0))
+		self.connect((self.sss_equ_0, 0), (self.gr_vector_to_stream_0_0, 0))
+		self.connect((self.gr_vector_to_stream_0_0_0, 0), (self.wxgui_scopesink2_0_1_0_0, 0))
+		self.connect((self.gr_deinterleave_0, 0), (self.gr_vector_to_stream_0_0_0, 0))
 
 	def get_freq_corr(self):
 		return self.freq_corr
@@ -231,6 +270,7 @@ class sss_corr3_gui(grc_wxgui.top_block_gui):
 	def set_avg_frames(self, avg_frames):
 		self.avg_frames = avg_frames
 		self.sss_corr3_gui_0.set_avg_frames(self.avg_frames)
+		self.wxgui_scopesink2_0_1.set_sample_rate(100/self.avg_frames)
 
 	def get_N_id_2(self):
 		return self.N_id_2
@@ -238,6 +278,7 @@ class sss_corr3_gui(grc_wxgui.top_block_gui):
 	def set_N_id_2(self, N_id_2):
 		self.N_id_2 = N_id_2
 		self.sss_corr3_gui_0.set_N_id_2(self.N_id_2)
+		self.sss_equ_0.set_N_id_2(self.N_id_2)
 
 	def get_N_id_1(self):
 		return self.N_id_1
@@ -278,7 +319,8 @@ class sss_corr3_gui(grc_wxgui.top_block_gui):
 
 	def set_samp_rate(self, samp_rate):
 		self.samp_rate = samp_rate
-		self.wxgui_scopesink2_0_1.set_sample_rate(self.samp_rate)
+		self.wxgui_scopesink2_0_1_0.set_sample_rate(self.samp_rate)
+		self.wxgui_scopesink2_0_1_0_0.set_sample_rate(self.samp_rate)
 
 	def get_rot(self):
 		return self.rot
@@ -331,6 +373,6 @@ if __name__ == '__main__':
 	parser.add_option("", "--decim", dest="decim", type="intx", default=16,
 		help="Set decim [default=%default]")
 	(options, args) = parser.parse_args()
-	tb = sss_corr3_gui(freq_corr=options.freq_corr, avg_frames=options.avg_frames, N_id_2=options.N_id_2, N_id_1=options.N_id_1, decim=options.decim)
+	tb = sss_corr5_gui(freq_corr=options.freq_corr, avg_frames=options.avg_frames, N_id_2=options.N_id_2, N_id_1=options.N_id_1, decim=options.decim)
 	tb.Run(True)
 
