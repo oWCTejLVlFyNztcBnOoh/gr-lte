@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='ASCII'?>
 <flow_graph>
-  <timestamp>Mon Oct 29 21:40:05 2012</timestamp>
+  <timestamp>Mon Oct 29 23:07:10 2012</timestamp>
   <block>
     <key>options</key>
     <param>
@@ -2277,7 +2277,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(457, 769)</value>
+      <value>(457, 768)</value>
     </param>
     <param>
       <key>_rotation</key>

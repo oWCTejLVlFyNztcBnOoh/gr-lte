@@ -76,20 +76,9 @@ class lte_cell_scan:
 		res = self.correlate_pss()
 		logging.debug("Found PSS correlations " + str(res))
 		for (N_id_2, frame_time, peak) in res:
-			ml12 = zeros(168) 
-			ml21 = zeros(168)
-			ml_max = (-1e6, 0, 0)
-			for N_id_1 in range(0,168):
-				for slot_0_10 in range(0,1): 
-					ml12[N_id_1] = self.correlate_sss(N_id_1, N_id_2, 0, frame_time, peak)
-					ml21[N_id_1] = self.correlate_sss(N_id_1, N_id_2, 1, frame_time, peak)
-					if (ml_max[0] < ml12[N_id_1]):
-						ml_max = (ml12[N_id_1], N_id_1, 0) 
-					if (ml_max[0] < ml21[N_id_1]):
-						ml_max = (ml21[N_id_1], N_id_1, 1) 
-			N_id_1 = ml_max[1]
-			ml = ml_max[0]
-			logging.debug("cell ID {}, SSS max-ml {}".format(3*N_id_1+N_id_2, ml))
+			res_sss = self.correlate_sss(N_id_2, frame_time, peak)
+			for (N_id_1, slot_0_10, ml) in res_sss:
+				logging.debug("cell ID {}, SSS max-ml {}".format(3*N_id_1+N_id_2, ml))
 
 
 	def correlate_pss(self):
@@ -115,12 +104,12 @@ class lte_cell_scan:
 		return [maxi]
 			
 
-	def correlate_sss(self, N_id_1, N_id_2, slot_0_10, pss_peak_time, pss_peak):
+	def correlate_sss(self, N_id_2, pss_peak_time, pss_peak):
 		frame_time = pss_peak_time - (160+144*6+2048*7)
 		if frame_time < 0:
 			frame_time += 30720*5
-		#debug_string = "Searching for SSS: N_id_1 {}, N_id_2 {}, slot_0_10 {}, frame time {:5.0f}, corr peak {:7.0f}"
-		#logging.debug(debug_string.format(N_id_1, N_id_2, slot_0_10, frame_time, pss_peak))
+		debug_string = "Searching for SSS: N_id_2 {}, frame time {:5.0f}, corr peak {:7.0f}"
+		logging.debug(debug_string.format(N_id_2, frame_time, pss_peak))
 		
 		fft_size = 2048/self.decim
 		N_re = 62
@@ -135,12 +124,18 @@ class lte_cell_scan:
 		stream_to_vector_0_0 = gr.stream_to_vector(gr.sizeof_gr_complex*1, N_re)
 		deinterleave_0 = gr.deinterleave(gr.sizeof_gr_complex*N_re)
 		sss_equ_0 = sss_equ(N_id_2=N_id_2)
-		sss_corr_0 = sss_ml_fd(decim=self.decim,N_id_1=N_id_1,N_id_2=N_id_2,avg_frames=1,slot_0_10=slot_0_10)
-		ml_sink = gr.vector_sink_f(1)
 		top.connect(source, fft, vector_to_stream_0, keep_m_in_n_0, stream_to_vector_0_0, deinterleave_0)
 		top.connect((deinterleave_0,0), (sss_equ_0,1))
 		top.connect((deinterleave_0,1), (sss_equ_0,0))
-		top.connect(sss_equ_0, sss_corr_0, ml_sink)
+		gr_interleave_1 = gr.interleave(gr.sizeof_float)
+		for N_id_1 in range(0,32):
+			for slot_0_10 in range(0,2):
+				sss_corr_0 = sss_ml_fd(decim=self.decim,N_id_1=N_id_1,N_id_2=N_id_2,avg_frames=self.avg_frames,slot_0_10=slot_0_10)
+				#top.connect(sss_equ_0, sss_corr_0, (gr_interleave_1,2*N_id_1+slot_0_10))
+				top.connect(sss_equ_0, sss_corr_0, gr.null_sink(gr.sizeof_float))
+		top.connect(sss_corr_0, gr_interleave_1)
+		ml_sink = gr.vector_sink_f(1)
+		top.connect(gr_interleave_1, ml_sink)
 
 		if self.dump != None:
 			top.connect(source, gr.file_sink(gr.sizeof_gr_complex*fft_size, self.dump + "_pss{}_sss_in.cfile".format(N_id_2)))
@@ -149,7 +144,13 @@ class lte_cell_scan:
 			top.connect(sss_corr_0, gr.file_sink(gr.sizeof_float, self.dump + "_pss{}_sss_corr.cfile".format(N_id_2)))
 
 		top.run()
-		return mean(ml_sink.data())
+		ml_data = ml_sink.data()
+		N_id_1 = int(argmax(ml_data)/2)
+		slot_0_10 = argmax(ml_data)%2
+		ml = ml_data[2*N_id_1+slot_0_10]
+
+		return [(N_id_1, slot_0_10, ml)]
+		
 
 
 if __name__ == '__main__':

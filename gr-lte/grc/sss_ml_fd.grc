@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='ASCII'?>
 <flow_graph>
-  <timestamp>Mon Oct 29 22:29:08 2012</timestamp>
+  <timestamp>Mon Oct 29 23:14:47 2012</timestamp>
   <block>
     <key>options</key>
     <param>
@@ -911,41 +911,6 @@
     </param>
   </block>
   <block>
-    <key>gr_file_sink</key>
-    <param>
-      <key>id</key>
-      <value>gr_file_sink_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>False</value>
-    </param>
-    <param>
-      <key>file</key>
-      <value>/home/user/git/gr-lte/gr-lte/test/octave/foo_pss0_sss_corr_inst.cfile</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>float</value>
-    </param>
-    <param>
-      <key>vlen</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>unbuffered</key>
-      <value>False</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(876, 706)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
     <key>gr_keep_m_in_n</key>
     <param>
       <key>id</key>
@@ -984,37 +949,6 @@
     <key>fir_filter_xxx</key>
     <param>
       <key>id</key>
-      <value>fir_filter_xxx_0_0_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>False</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>fff</value>
-    </param>
-    <param>
-      <key>decim</key>
-      <value>avg_frames*2</value>
-    </param>
-    <param>
-      <key>taps</key>
-      <value>numpy.ones(avg_frames*2)/avg_frames/2</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(529, 787)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>fir_filter_xxx</key>
-    <param>
-      <key>id</key>
       <value>fir_filter_xxx_0_0</value>
     </param>
     <param>
@@ -1036,6 +970,37 @@
     <param>
       <key>_coordinate</key>
       <value>(492, 700)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>pad_sink</key>
+    <param>
+      <key>id</key>
+      <value>sss_ml</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>ml</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>float</value>
+    </param>
+    <param>
+      <key>vlen</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(843, 635)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1070,38 +1035,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(516, 867)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>pad_sink</key>
-    <param>
-      <key>id</key>
-      <value>sss_ml</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value>ml</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>float</value>
-    </param>
-    <param>
-      <key>vlen</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(843, 635)</value>
+      <value>(527, 782)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1199,18 +1133,6 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>fir_filter_xxx_0_0</source_block_id>
-    <sink_block_id>fir_filter_xxx_0_0_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>fir_filter_xxx_0_0_0</source_block_id>
-    <sink_block_id>sss_ml</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
     <source_block_id>sss_est_fd_0</source_block_id>
     <sink_block_id>sss_est_fd_0_1</sink_block_id>
     <source_key>0</source_key>
@@ -1219,12 +1141,6 @@
   <connection>
     <source_block_id>virtual_source_0_2_0</source_block_id>
     <sink_block_id>gr_multiply_xx_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gr_vector_to_stream_0_2</source_block_id>
-    <sink_block_id>gr_file_sink_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
