@@ -2,11 +2,11 @@
 ##################################################
 # Gnuradio Python Flow Graph
 # Title: Sss Corr5 Gui
-# Generated: Sat Oct 27 20:22:26 2012
+# Generated: Mon Oct 29 21:40:05 2012
 ##################################################
 
-execfile("/home/user/.grc_gnuradio/sss_corr3_gui.py")
 execfile("/home/user/.grc_gnuradio/sss_equ.py")
+execfile("/home/user/.grc_gnuradio/sss_ml_fd.py")
 from gnuradio import digital
 from gnuradio import eng_notation
 from gnuradio import gr
@@ -43,6 +43,7 @@ class sss_corr5_gui(grc_wxgui.top_block_gui):
 		##################################################
 		self.vec_half_frame = vec_half_frame = 30720*5/decim
 		self.symbol_start = symbol_start = 144/decim
+		self.slot_0_10 = slot_0_10 = 1
 		self.samp_rate = samp_rate = 30720e3/decim
 		self.rot = rot = 0
 		self.noise_level = noise_level = 0
@@ -102,6 +103,7 @@ class sss_corr5_gui(grc_wxgui.top_block_gui):
 		self.notebook_0.AddPage(grc_wxgui.Panel(self.notebook_0), "SSS ML")
 		self.notebook_0.AddPage(grc_wxgui.Panel(self.notebook_0), "SSS equ")
 		self.notebook_0.AddPage(grc_wxgui.Panel(self.notebook_0), "SSS in")
+		self.notebook_0.AddPage(grc_wxgui.Panel(self.notebook_0), "PSS equ")
 		self.Add(self.notebook_0)
 		_noise_level_sizer = wx.BoxSizer(wx.VERTICAL)
 		self._noise_level_text_box = forms.text_box(
@@ -126,6 +128,20 @@ class sss_corr5_gui(grc_wxgui.top_block_gui):
 			proportion=1,
 		)
 		self.Add(_noise_level_sizer)
+		self.wxgui_scopesink2_0_1_0_1 = scopesink2.scope_sink_c(
+			self.notebook_0.GetPage(3).GetWin(),
+			title="Scope Plot",
+			sample_rate=samp_rate,
+			v_scale=0,
+			v_offset=0,
+			t_scale=0,
+			ac_couple=False,
+			xy_mode=False,
+			num_inputs=2,
+			trig_mode=gr.gr_TRIG_MODE_AUTO,
+			y_axis_label="Counts",
+		)
+		self.notebook_0.GetPage(3).Add(self.wxgui_scopesink2_0_1_0_1.win)
 		self.wxgui_scopesink2_0_1_0_0 = scopesink2.scope_sink_c(
 			self.notebook_0.GetPage(2).GetWin(),
 			title="Scope Plot",
@@ -168,22 +184,28 @@ class sss_corr5_gui(grc_wxgui.top_block_gui):
 			y_axis_label="Counts",
 		)
 		self.notebook_0.GetPage(0).Add(self.wxgui_scopesink2_0_1.win)
-		self.sss_equ_0 = sss_equ(
-			N_id_2=N_id_2,
-		)
-		self.sss_corr3_gui_0 = sss_corr3_gui(
+		self.sss_ml_fd_0 = sss_ml_fd(
 			decim=decim,
 			N_id_1=N_id_1,
 			N_id_2=N_id_2,
 			avg_frames=avg_frames,
-			slot_0_10=1,
+			slot_0_10=slot_0_10,
+		)
+		self.sss_equ_0_0 = sss_equ(
+			N_id_2=N_id_2,
+		)
+		self.sss_equ_0 = sss_equ(
+			N_id_2=N_id_2,
 		)
 		self.gr_vector_to_stream_1 = gr.vector_to_stream(gr.sizeof_gr_complex*1, fft_size)
+		self.gr_vector_to_stream_0_0_1_0 = gr.vector_to_stream(gr.sizeof_gr_complex*1, N_re)
+		self.gr_vector_to_stream_0_0_1 = gr.vector_to_stream(gr.sizeof_gr_complex*1, N_re)
 		self.gr_vector_to_stream_0_0_0 = gr.vector_to_stream(gr.sizeof_gr_complex*1, N_re)
 		self.gr_vector_to_stream_0_0 = gr.vector_to_stream(gr.sizeof_gr_complex*1, N_re)
 		self.gr_vector_to_stream_0 = gr.vector_to_stream(gr.sizeof_gr_complex*1, fft_size)
 		self.gr_vector_source_x_0_1 = gr.vector_source_c((gen_sss_fd( N_id_1, N_id_2, fft_size).get_sss(False)), True, fft_size)
 		self.gr_vector_source_x_0_0_1 = gr.vector_source_c((gen_pss_fd(N_id_2, fft_size, False).get_data()), True, fft_size)
+		self.gr_vector_source_x_0_0_0 = gr.vector_source_c(((gen_pss_fd(N_id_2, N_re, False).get_data())), True, N_re)
 		self.gr_vector_source_x_0_0 = gr.vector_source_c((gen_pss_fd(N_id_2, fft_size, False).get_data()), True, fft_size)
 		self.gr_vector_source_x_0 = gr.vector_source_c((gen_sss_fd( N_id_1, N_id_2, fft_size).get_sss(True)), True, fft_size)
 		self.gr_throttle_0 = gr.throttle(gr.sizeof_gr_complex*1, samp_rate)
@@ -225,14 +247,8 @@ class sss_corr5_gui(grc_wxgui.top_block_gui):
 		##################################################
 		# Connections
 		##################################################
-		self.connect((self.gr_stream_to_vector_0, 0), (self.gr_fft_vxx_0, 0))
-		self.connect((self.gr_stream_to_vector_0_0, 0), (self.gr_deinterleave_0, 0))
-		self.connect((self.gr_keep_m_in_n_0, 0), (self.gr_stream_to_vector_0_0, 0))
-		self.connect((self.gr_vector_to_stream_0, 0), (self.gr_keep_m_in_n_0, 0))
-		self.connect((self.gr_fft_vxx_0, 0), (self.gr_vector_to_stream_0, 0))
 		self.connect((self.gr_noise_source_x_0, 0), (self.gr_add_xx_0, 1))
 		self.connect((self.gr_add_xx_0, 0), (self.gr_multiply_const_vxx_0, 0))
-		self.connect((self.gr_throttle_0, 0), (self.gr_stream_to_vector_0, 0))
 		self.connect((self.blks2_selector_0, 0), (self.gr_channel_model_0, 0))
 		self.connect((self.blks2_selector_0, 1), (self.gr_add_xx_0, 0))
 		self.connect((self.gr_channel_model_0, 0), (self.blks2_selector_0_0, 0))
@@ -249,14 +265,26 @@ class sss_corr5_gui(grc_wxgui.top_block_gui):
 		self.connect((self.gr_vector_source_x_0_0_1, 0), (self.gr_interleave_0, 3))
 		self.connect((self.gr_vector_source_x_0, 0), (self.gr_interleave_0, 0))
 		self.connect((self.gr_vector_source_x_0_1, 0), (self.gr_interleave_0, 2))
-		self.connect((self.gr_deinterleave_0, 0), (self.sss_equ_0, 1))
-		self.connect((self.gr_deinterleave_0, 1), (self.sss_equ_0, 0))
-		self.connect((self.sss_corr3_gui_0, 0), (self.wxgui_scopesink2_0_1, 0))
-		self.connect((self.sss_equ_0, 0), (self.sss_corr3_gui_0, 0))
-		self.connect((self.gr_vector_to_stream_0_0, 0), (self.wxgui_scopesink2_0_1_0, 0))
-		self.connect((self.sss_equ_0, 0), (self.gr_vector_to_stream_0_0, 0))
-		self.connect((self.gr_vector_to_stream_0_0_0, 0), (self.wxgui_scopesink2_0_1_0_0, 0))
 		self.connect((self.gr_deinterleave_0, 0), (self.gr_vector_to_stream_0_0_0, 0))
+		self.connect((self.gr_vector_to_stream_0_0_0, 0), (self.wxgui_scopesink2_0_1_0_0, 0))
+		self.connect((self.sss_equ_0, 0), (self.gr_vector_to_stream_0_0, 0))
+		self.connect((self.gr_vector_to_stream_0_0, 0), (self.wxgui_scopesink2_0_1_0, 0))
+		self.connect((self.gr_deinterleave_0, 1), (self.sss_equ_0, 0))
+		self.connect((self.gr_deinterleave_0, 0), (self.sss_equ_0, 1))
+		self.connect((self.gr_throttle_0, 0), (self.gr_stream_to_vector_0, 0))
+		self.connect((self.gr_fft_vxx_0, 0), (self.gr_vector_to_stream_0, 0))
+		self.connect((self.gr_vector_to_stream_0, 0), (self.gr_keep_m_in_n_0, 0))
+		self.connect((self.gr_keep_m_in_n_0, 0), (self.gr_stream_to_vector_0_0, 0))
+		self.connect((self.gr_stream_to_vector_0_0, 0), (self.gr_deinterleave_0, 0))
+		self.connect((self.gr_stream_to_vector_0, 0), (self.gr_fft_vxx_0, 0))
+		self.connect((self.gr_deinterleave_0, 1), (self.sss_equ_0_0, 0))
+		self.connect((self.gr_deinterleave_0, 1), (self.sss_equ_0_0, 1))
+		self.connect((self.gr_vector_to_stream_0_0_1, 0), (self.wxgui_scopesink2_0_1_0_1, 0))
+		self.connect((self.gr_vector_to_stream_0_0_1_0, 0), (self.wxgui_scopesink2_0_1_0_1, 1))
+		self.connect((self.sss_equ_0_0, 0), (self.gr_vector_to_stream_0_0_1, 0))
+		self.connect((self.gr_vector_source_x_0_0_0, 0), (self.gr_vector_to_stream_0_0_1_0, 0))
+		self.connect((self.sss_equ_0, 0), (self.sss_ml_fd_0, 0))
+		self.connect((self.sss_ml_fd_0, 0), (self.wxgui_scopesink2_0_1, 0))
 
 	def get_freq_corr(self):
 		return self.freq_corr
@@ -269,23 +297,24 @@ class sss_corr5_gui(grc_wxgui.top_block_gui):
 
 	def set_avg_frames(self, avg_frames):
 		self.avg_frames = avg_frames
-		self.sss_corr3_gui_0.set_avg_frames(self.avg_frames)
 		self.wxgui_scopesink2_0_1.set_sample_rate(100/self.avg_frames)
+		self.sss_ml_fd_0.set_avg_frames(self.avg_frames)
 
 	def get_N_id_2(self):
 		return self.N_id_2
 
 	def set_N_id_2(self, N_id_2):
 		self.N_id_2 = N_id_2
-		self.sss_corr3_gui_0.set_N_id_2(self.N_id_2)
+		self.sss_equ_0_0.set_N_id_2(self.N_id_2)
 		self.sss_equ_0.set_N_id_2(self.N_id_2)
+		self.sss_ml_fd_0.set_N_id_2(self.N_id_2)
 
 	def get_N_id_1(self):
 		return self.N_id_1
 
 	def set_N_id_1(self, N_id_1):
 		self.N_id_1 = N_id_1
-		self.sss_corr3_gui_0.set_N_id_1(self.N_id_1)
+		self.sss_ml_fd_0.set_N_id_1(self.N_id_1)
 
 	def get_decim(self):
 		return self.decim
@@ -297,7 +326,7 @@ class sss_corr5_gui(grc_wxgui.top_block_gui):
 		self.set_samp_rate(30720e3/self.decim)
 		self.set_fft_size(2048/self.decim)
 		self.gr_keep_m_in_n_1.set_n(self.fft_size+144/self.decim)
-		self.sss_corr3_gui_0.set_decim(self.decim)
+		self.sss_ml_fd_0.set_decim(self.decim)
 
 	def get_vec_half_frame(self):
 		return self.vec_half_frame
@@ -314,13 +343,21 @@ class sss_corr5_gui(grc_wxgui.top_block_gui):
 		self._symbol_start_text_box.set_value(self.symbol_start)
 		self.gr_keep_m_in_n_1.set_offset(self.symbol_start)
 
+	def get_slot_0_10(self):
+		return self.slot_0_10
+
+	def set_slot_0_10(self, slot_0_10):
+		self.slot_0_10 = slot_0_10
+		self.sss_ml_fd_0.set_slot_0_10(self.slot_0_10)
+
 	def get_samp_rate(self):
 		return self.samp_rate
 
 	def set_samp_rate(self, samp_rate):
 		self.samp_rate = samp_rate
-		self.wxgui_scopesink2_0_1_0.set_sample_rate(self.samp_rate)
 		self.wxgui_scopesink2_0_1_0_0.set_sample_rate(self.samp_rate)
+		self.wxgui_scopesink2_0_1_0.set_sample_rate(self.samp_rate)
+		self.wxgui_scopesink2_0_1_0_1.set_sample_rate(self.samp_rate)
 
 	def get_rot(self):
 		return self.rot
@@ -347,10 +384,10 @@ class sss_corr5_gui(grc_wxgui.top_block_gui):
 
 	def set_fft_size(self, fft_size):
 		self.fft_size = fft_size
-		self.gr_keep_m_in_n_0.set_offset((self.fft_size-self.N_re)/2)
-		self.gr_keep_m_in_n_0.set_n(self.fft_size)
 		self.gr_keep_m_in_n_1.set_m(self.fft_size)
 		self.gr_keep_m_in_n_1.set_n(self.fft_size+144/self.decim)
+		self.gr_keep_m_in_n_0.set_offset((self.fft_size-self.N_re)/2)
+		self.gr_keep_m_in_n_0.set_n(self.fft_size)
 
 	def get_N_re(self):
 		return self.N_re

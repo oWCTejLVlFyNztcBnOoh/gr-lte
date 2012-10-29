@@ -13,7 +13,7 @@ class symbol_source(gr.hier_block2):
     @todo: implement del_cp = False 
     """
     
-    def __init__(self, data, decim, symbol_mask, frame_start, del_cp=True, symbol_start=-1, repeat=False):
+    def __init__(self, data, decim, symbol_mask, frame_start, del_cp=True, symbol_start=-1, repeat=False, vlen=1):
       """
       @param decim: sample rate decimator, sample rate = 30720e3/decim
       @param symbol_mask: array[0..10*14] in {0,1} of symbols to deliver per frame
@@ -25,7 +25,7 @@ class symbol_source(gr.hier_block2):
       gr.hier_block2.__init__(
           self, "symbol source",
           gr.io_signature(0, 0, 0),
-          gr.io_signature(1, 1, gr.sizeof_gr_complex),
+          gr.io_signature(1, 1, vlen*gr.sizeof_gr_complex),
       )
       logger = logging.getLogger('symbol_source')
 
@@ -61,7 +61,8 @@ class symbol_source(gr.hier_block2):
           n_slot += 1
           if n_slot >= 20:
             n_slot = 0
-      
-      self.source = gr.vector_source_c(symbols, repeat)
+      symbols = symbols[0:pos_o]
+
+      self.source = gr.vector_source_c(symbols, repeat, vlen)
       #self.source.set_data(symbols);
       self.connect(self.source, self)

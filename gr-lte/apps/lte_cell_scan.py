@@ -7,8 +7,9 @@ from gnuradio.eng_option import eng_option
 from gnuradio.filter import firdes
 from gnuradio.gr import firdes
 from optparse import OptionParser
-from pss_corr import *  
-from sss_corr import *
+from pss_corr import *
+from sss_equ import *  
+from sss_ml_fd import *
 from symbol_source import *
 from lte_dl_ss_source import *   
 import logging
@@ -75,7 +76,20 @@ class lte_cell_scan:
 		res = self.correlate_pss()
 		logging.debug("Found PSS correlations " + str(res))
 		for (N_id_2, frame_time, peak) in res:
-			self.correlate_sss(N_id_2, frame_time, peak)
+			ml12 = zeros(168) 
+			ml21 = zeros(168)
+			ml_max = (-1e6, 0, 0)
+			for N_id_1 in range(0,168):
+				for slot_0_10 in range(0,1): 
+					ml12[N_id_1] = self.correlate_sss(N_id_1, N_id_2, 0, frame_time, peak)
+					ml21[N_id_1] = self.correlate_sss(N_id_1, N_id_2, 1, frame_time, peak)
+					if (ml_max[0] < ml12[N_id_1]):
+						ml_max = (ml12[N_id_1], N_id_1, 0) 
+					if (ml_max[0] < ml21[N_id_1]):
+						ml_max = (ml21[N_id_1], N_id_1, 1) 
+			N_id_1 = ml_max[1]
+			ml = ml_max[0]
+			logging.debug("cell ID {}, SSS max-ml {}".format(3*N_id_1+N_id_2, ml))
 
 
 	def correlate_pss(self):
@@ -101,27 +115,41 @@ class lte_cell_scan:
 		return [maxi]
 			
 
-	def correlate_sss(self, N_id_2, pss_peak_time, pss_peak):
+	def correlate_sss(self, N_id_1, N_id_2, slot_0_10, pss_peak_time, pss_peak):
 		frame_time = pss_peak_time - (160+144*6+2048*7)
 		if frame_time < 0:
 			frame_time += 30720*5
-		logging.debug("Searching for SSS: N_id_2 {}, frame time {:5.0f}, corr peak {:7.0f}".format(N_id_2, frame_time, pss_peak))
+		#debug_string = "Searching for SSS: N_id_1 {}, N_id_2 {}, slot_0_10 {}, frame time {:5.0f}, corr peak {:7.0f}"
+		#logging.debug(debug_string.format(N_id_1, N_id_2, slot_0_10, frame_time, pss_peak))
 		
 		fft_size = 2048/self.decim
+		N_re = 62
 		top = gr.top_block("pss corr graph")
 		symbol_mask = numpy.zeros(20*7)
 		symbol_mask[5:7] = 1
 		symbol_mask[75:77] = 1
-		source = symbol_source(self.buffer, self.decim, symbol_mask, frame_time)
-		to_vec = gr.stream_to_vector(gr.sizeof_gr_complex, fft_size)
-		#fft = gr.fft_vcc(fft_size, True, window.blackmanharris(1024), True)
-		#top.connect(source, to_vec, fft)
+		source = symbol_source(self.buffer, self.decim, symbol_mask, frame_time, vlen=fft_size)
+		fft = gr.fft_vcc(fft_size, True, (window.blackmanharris(1024)), True, 1)
+		vector_to_stream_0 = gr.vector_to_stream(gr.sizeof_gr_complex*1, fft_size)
+		keep_m_in_n_0 = gr.keep_m_in_n(gr.sizeof_gr_complex, N_re, fft_size, (fft_size-N_re)/2)
+		stream_to_vector_0_0 = gr.stream_to_vector(gr.sizeof_gr_complex*1, N_re)
+		deinterleave_0 = gr.deinterleave(gr.sizeof_gr_complex*N_re)
+		sss_equ_0 = sss_equ(N_id_2=N_id_2)
+		sss_corr_0 = sss_ml_fd(decim=self.decim,N_id_1=N_id_1,N_id_2=N_id_2,avg_frames=1,slot_0_10=slot_0_10)
+		ml_sink = gr.vector_sink_f(1)
+		top.connect(source, fft, vector_to_stream_0, keep_m_in_n_0, stream_to_vector_0_0, deinterleave_0)
+		top.connect((deinterleave_0,0), (sss_equ_0,1))
+		top.connect((deinterleave_0,1), (sss_equ_0,0))
+		top.connect(sss_equ_0, sss_corr_0, ml_sink)
 
 		if self.dump != None:
-			top.connect(source, gr.file_sink(gr.sizeof_gr_complex, self.dump + "_pss{}_sss_in.cfile".format(N_id_2)))
-			#top.connect(fft, gr.file_sink(gr.sizeof_gr_complex*fft_size, self.dump + "_pss{}_sss_fd.cfile".format(N_id_2)))
+			top.connect(source, gr.file_sink(gr.sizeof_gr_complex*fft_size, self.dump + "_pss{}_sss_in.cfile".format(N_id_2)))
+			top.connect((deinterleave_0,0), gr.file_sink(gr.sizeof_gr_complex*N_re, self.dump + "_pss{}_sss_fd_in.cfile".format(N_id_2)))
+			top.connect(sss_equ_0, gr.file_sink(gr.sizeof_gr_complex*N_re, self.dump + "_pss{}_sss_fd_equ.cfile".format(N_id_2)))
+			top.connect(sss_corr_0, gr.file_sink(gr.sizeof_float, self.dump + "_pss{}_sss_corr.cfile".format(N_id_2)))
 
 		top.run()
+		return mean(ml_sink.data())
 
 
 if __name__ == '__main__':
@@ -139,7 +167,7 @@ if __name__ == '__main__':
 	(options, args) = parser.parse_args()
 	#logging.basicConfig(format='%(asctime)s %(message)s', level=logging.DEBUG)
 	logging.basicConfig(format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s', level=logging.DEBUG)
-	#logging.getLogger('symbol_source').setLevel(logging.WARN)
+	logging.getLogger('symbol_source').setLevel(logging.WARN)
 	logging.getLogger('gen_sss_fd').setLevel(logging.WARN)
 	tb = lte_cell_scan(decim=options.decim, avg_frames=options.avg_frames, freq_corr=options.freq_corr, file_name=options.file_name, dump=options.dump)
 	tb.scan()
