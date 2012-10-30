@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='ASCII'?>
 <flow_graph>
-  <timestamp>Mon Oct 29 20:13:10 2012</timestamp>
+  <timestamp>Tue Oct 30 21:50:59 2012</timestamp>
   <block>
     <key>options</key>
     <param>
@@ -112,29 +112,6 @@
     <param>
       <key>_coordinate</key>
       <value>(208, 22)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>variable</key>
-    <param>
-      <key>id</key>
-      <value>N_re</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>62</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(307, 26)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -259,41 +236,6 @@
     <param>
       <key>_coordinate</key>
       <value>(329, 237)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>gr_vector_source_x</key>
-    <param>
-      <key>id</key>
-      <value>gr_vector_source_x_0_0_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>False</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>complex</value>
-    </param>
-    <param>
-      <key>vector</key>
-      <value>numpy.conjugate(gen_pss_fd(N_id_2, N_re, False).get_data())</value>
-    </param>
-    <param>
-      <key>repeat</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>vlen</key>
-      <value>N_re</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(25, 229)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -763,41 +705,6 @@
     </param>
   </block>
   <block>
-    <key>gr_vector_source_x</key>
-    <param>
-      <key>id</key>
-      <value>gr_vector_source_x_0_0_0_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>complex</value>
-    </param>
-    <param>
-      <key>vector</key>
-      <value>gen_pss_fd(N_id_2, N_re, False).get_data()</value>
-    </param>
-    <param>
-      <key>repeat</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>vlen</key>
-      <value>N_re</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(53, 843)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
     <key>pad_source</key>
     <param>
       <key>id</key>
@@ -859,6 +766,99 @@
       <value>0</value>
     </param>
   </block>
+  <block>
+    <key>variable</key>
+    <param>
+      <key>id</key>
+      <value>N_re</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>62</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(306, 27)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>gr_vector_source_x</key>
+    <param>
+      <key>id</key>
+      <value>pss_fd_vec</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>complex</value>
+    </param>
+    <param>
+      <key>vector</key>
+      <value>gen_pss_fd(N_id_2, N_re, False).get_data()</value>
+    </param>
+    <param>
+      <key>repeat</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>vlen</key>
+      <value>N_re</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(54, 843)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>gr_vector_source_x</key>
+    <param>
+      <key>id</key>
+      <value>pss_fd_vec</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>complex</value>
+    </param>
+    <param>
+      <key>vector</key>
+      <value>numpy.conjugate(gen_pss_fd(N_id_2, N_re, False).get_data())</value>
+    </param>
+    <param>
+      <key>repeat</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>vlen</key>
+      <value>N_re</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(25, 229)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
   <connection>
     <source_block_id>gr_divide_xx_1</source_block_id>
     <sink_block_id>pad_sink_0_0</sink_block_id>
@@ -872,7 +872,7 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>gr_vector_source_x_0_0_0</source_block_id>
+    <source_block_id>pss_fd_vec</source_block_id>
     <sink_block_id>gr_multiply_xx_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>1</sink_key>
@@ -980,7 +980,7 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>gr_vector_source_x_0_0_0_0</source_block_id>
+    <source_block_id>pss_fd_vec</source_block_id>
     <sink_block_id>gr_divide_xx_1</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>

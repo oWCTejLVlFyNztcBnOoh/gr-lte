@@ -8,9 +8,6 @@ from gnuradio.filter import firdes
 from gnuradio.gr import firdes
 from optparse import OptionParser
 from pss_corr import *
-from sss_equ import *  
-from sss_ml_fd import *
-from symbol_source import *
 from lte_dl_ss_source import *   
 import logging
 
@@ -44,6 +41,8 @@ class lte_cell_scan:
 		self.samp_rate = samp_rate = 30720e3/decim
 		self.cutoff_freq = cutoff_freq = 550e3
 		self.transition_width = transition_width = 100e3
+		self.fft_size = 2048/self.decim
+		self.N_re = 62
 
 		##################################################
 		# Generate input vector source
@@ -71,6 +70,17 @@ class lte_cell_scan:
 		logging.debug("Config: decim {}, avg_frames {}, freq_corr {}".format(self.decim, self.avg_frames, self.freq_corr)) 
 		self.source = gr.vector_source_c(self.buffer)
 		
+		self.create_pss_graph()
+		
+		self.sss_corr = sss_corr(self.decim, self.fft_size, self.N_re, self.avg_frames, self.dump)
+		
+
+	def create_pss_graph(self):
+		self.pss_top = gr.top_block("pss corr graph")
+		self.pss_corr = pss_corr(0, self.decim, self.avg_frames*2, self.freq_corr, self.dump)
+		self.pss_sink = gr.vector_sink_f()
+		self.pss_top.connect(self.source, self.pss_corr, self.pss_sink)
+
 
 	def scan(self):
 		res = self.correlate_pss()
@@ -82,20 +92,17 @@ class lte_cell_scan:
 
 
 	def correlate_pss(self):
-		top = gr.top_block("pss corr graph")
-		#and_block = gr.add_cc()
-		#top.connect(self.source, and_block)
-		corr = range(0,3)
-		sink_pss = range(0,3)
-		for N_id_2 in range(0,3):
-			corr[N_id_2] = pss_corr(N_id_2, self.decim, self.avg_frames*2, self.freq_corr, self.dump)
-			sink_pss[N_id_2] = gr.vector_sink_f()
-			top.connect(self.source, corr[N_id_2], sink_pss[N_id_2])
-		top.run()
 		ret = []
 		maxi = (0,0,0)
 		for N_id_2 in range(0,3):
-			pss_res = sink_pss[N_id_2].data()
+			# prepare
+			self.source.rewind()
+			self.pss_corr.set_N_id_2(N_id_2)
+			self.pss_sink.reset()
+			# run
+			self.pss_top.run()
+			# collect results
+			pss_res = self.pss_sink.data()
 			for i in range(0, len(pss_res)/2): 
 				ret += [(N_id_2, pss_res[2*i], pss_res[2*i+1])]
 				if maxi[2] < pss_res[2*i+1]:
@@ -111,46 +118,7 @@ class lte_cell_scan:
 		debug_string = "Searching for SSS: N_id_2 {}, frame time {:5.0f}, corr peak {:7.0f}"
 		logging.debug(debug_string.format(N_id_2, frame_time, pss_peak))
 		
-		fft_size = 2048/self.decim
-		N_re = 62
-		top = gr.top_block("pss corr graph")
-		symbol_mask = numpy.zeros(20*7)
-		symbol_mask[5:7] = 1
-		symbol_mask[75:77] = 1
-		source = symbol_source(self.buffer, self.decim, symbol_mask, frame_time, vlen=fft_size)
-		fft = gr.fft_vcc(fft_size, True, (window.blackmanharris(1024)), True, 1)
-		vector_to_stream_0 = gr.vector_to_stream(gr.sizeof_gr_complex*1, fft_size)
-		keep_m_in_n_0 = gr.keep_m_in_n(gr.sizeof_gr_complex, N_re, fft_size, (fft_size-N_re)/2)
-		stream_to_vector_0_0 = gr.stream_to_vector(gr.sizeof_gr_complex*1, N_re)
-		deinterleave_0 = gr.deinterleave(gr.sizeof_gr_complex*N_re)
-		sss_equ_0 = sss_equ(N_id_2=N_id_2)
-		top.connect(source, fft, vector_to_stream_0, keep_m_in_n_0, stream_to_vector_0_0, deinterleave_0)
-		top.connect((deinterleave_0,0), (sss_equ_0,1))
-		top.connect((deinterleave_0,1), (sss_equ_0,0))
-		gr_interleave_1 = gr.interleave(gr.sizeof_float)
-		for N_id_1 in range(0,32):
-			for slot_0_10 in range(0,2):
-				sss_corr_0 = sss_ml_fd(decim=self.decim,N_id_1=N_id_1,N_id_2=N_id_2,avg_frames=self.avg_frames,slot_0_10=slot_0_10)
-				#top.connect(sss_equ_0, sss_corr_0, (gr_interleave_1,2*N_id_1+slot_0_10))
-				top.connect(sss_equ_0, sss_corr_0, gr.null_sink(gr.sizeof_float))
-		top.connect(sss_corr_0, gr_interleave_1)
-		ml_sink = gr.vector_sink_f(1)
-		top.connect(gr_interleave_1, ml_sink)
-
-		if self.dump != None:
-			top.connect(source, gr.file_sink(gr.sizeof_gr_complex*fft_size, self.dump + "_pss{}_sss_in.cfile".format(N_id_2)))
-			top.connect((deinterleave_0,0), gr.file_sink(gr.sizeof_gr_complex*N_re, self.dump + "_pss{}_sss_fd_in.cfile".format(N_id_2)))
-			top.connect(sss_equ_0, gr.file_sink(gr.sizeof_gr_complex*N_re, self.dump + "_pss{}_sss_fd_equ.cfile".format(N_id_2)))
-			top.connect(sss_corr_0, gr.file_sink(gr.sizeof_float, self.dump + "_pss{}_sss_corr.cfile".format(N_id_2)))
-
-		top.run()
-		ml_data = ml_sink.data()
-		N_id_1 = int(argmax(ml_data)/2)
-		slot_0_10 = argmax(ml_data)%2
-		ml = ml_data[2*N_id_1+slot_0_10]
-
-		return [(N_id_1, slot_0_10, ml)]
-		
+		return self.sss_corr.correlate(self.buffer, frame_time, N_id_2)
 
 
 if __name__ == '__main__':

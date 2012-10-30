@@ -33,6 +33,11 @@ class gen_sss_fd:
     else:
       return self.sss10
     
+  def get_sss_conj(self, slot0=True):
+    if slot0:
+      return numpy.conjugate(self.sss0)
+    else:
+      return numpy.conjugate(self.sss10)
     
   def get_sss_conj_rev(self, slot0=True):
     if slot0:

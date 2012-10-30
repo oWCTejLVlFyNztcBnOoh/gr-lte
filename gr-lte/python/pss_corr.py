@@ -18,8 +18,10 @@ class pss_corr(gr.hier_block2):
     )
     vec_half_frame = 30720*5/decim
     
-    taps = gen_pss_td(N_id_2, N_re=2048/decim, freq_corr=freq_corr).get_data_conj_rev()
-    self.corr = filter.fir_filter_ccc(1, taps)
+    self.taps = []
+    for i in range(0,3):
+      self.taps.append(gen_pss_td(i, N_re=2048/decim, freq_corr=freq_corr).get_data_conj_rev())
+    self.corr = filter.fir_filter_ccc(1, self.taps[N_id_2])
     self.mag = gr.complex_to_mag_squared()
     self.vec = gr.stream_to_vector(gr.sizeof_float*1, vec_half_frame)
     self.deint = gr.deinterleave(gr.sizeof_float*vec_half_frame)
@@ -52,7 +54,8 @@ class pss_corr(gr.hier_block2):
       self.connect(self.add, gr.file_sink(gr.sizeof_float*vec_half_frame, dump + "_pss{}_corr_add_f.cfile".format(N_id_2)))
 
 
-
+  def set_N_id_2(self, N_id_2):
+    self.corr.set_taps(self.taps[N_id_2])
 
 
 

@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='ASCII'?>
 <flow_graph>
-  <timestamp>Mon Oct 29 21:24:34 2012</timestamp>
+  <timestamp>Tue Oct 30 21:06:39 2012</timestamp>
   <block>
     <key>options</key>
     <param>
@@ -142,29 +142,6 @@
     </param>
   </block>
   <block>
-    <key>variable</key>
-    <param>
-      <key>id</key>
-      <value>N_re</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>62</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(320, 21)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
     <key>pad_source</key>
     <param>
       <key>id</key>
@@ -258,29 +235,6 @@
     </param>
   </block>
   <block>
-    <key>pss_chan_est2</key>
-    <param>
-      <key>id</key>
-      <value>pss_chan_est2_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>N_id_2</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(236, 241)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
     <key>gr_multiply_xx</key>
     <param>
       <key>id</key>
@@ -305,6 +259,52 @@
     <param>
       <key>_coordinate</key>
       <value>(301, 116)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>pss_chan_est2</key>
+    <param>
+      <key>id</key>
+      <value>pss_chan_est2_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>N_id_2</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(236, 241)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>variable</key>
+    <param>
+      <key>id</key>
+      <value>N_re</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>62</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(386, 17)</value>
     </param>
     <param>
       <key>_rotation</key>
