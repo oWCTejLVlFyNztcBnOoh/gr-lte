@@ -50,8 +50,8 @@ class pss_corr(gr.hier_block2):
         self.connect((self.deint, i), (self.add, i))
 
     if dump != None:
-      self.connect(self.mag, gr.file_sink(gr.sizeof_float, dump + "_pss{}_corr_f.cfile".format(N_id_2)))
-      self.connect(self.add, gr.file_sink(gr.sizeof_float*vec_half_frame, dump + "_pss{}_corr_add_f.cfile".format(N_id_2)))
+      self.connect(self.mag, gr.file_sink(gr.sizeof_float, dump + "_pss_corr_f.cfile"))
+      self.connect(self.add, gr.file_sink(gr.sizeof_float*vec_half_frame, dump + "_pss_corr_add_f.cfile"))
 
 
   def set_N_id_2(self, N_id_2):

@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='ASCII'?>
 <flow_graph>
-  <timestamp>Wed Oct 31 17:05:51 2012</timestamp>
+  <timestamp>Wed Oct 31 18:26:30 2012</timestamp>
   <block>
     <key>options</key>
     <param>
       <key>id</key>
-      <value>sss_ml_fd</value>
+      <value>sss_derot</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -13,7 +13,7 @@
     </param>
     <param>
       <key>title</key>
-      <value>SSS FD log-ML detector</value>
+      <value>SSS FD derot</value>
     </param>
     <param>
       <key>author</key>
@@ -107,10 +107,56 @@
     </param>
   </block>
   <block>
-    <key>gr_interleave</key>
+    <key>virtual_source</key>
     <param>
       <key>id</key>
-      <value>gr_interleave_1</value>
+      <value>virtual_source_0_2_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>stream_id</key>
+      <value>sss_est_fd</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(16, 271)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>virtual_source</key>
+    <param>
+      <key>id</key>
+      <value>virtual_source_3</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>stream_id</key>
+      <value>sss_est_fd</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(39, 633)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>gr_vector_to_stream</key>
+    <param>
+      <key>id</key>
+      <value>gr_vector_to_stream_0_0_0</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -121,97 +167,16 @@
       <value>complex</value>
     </param>
     <param>
-      <key>num_streams</key>
-      <value>2</value>
-    </param>
-    <param>
-      <key>vlen</key>
+      <key>num_items</key>
       <value>N_re</value>
     </param>
     <param>
-      <key>_coordinate</key>
-      <value>(286, 230)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>virtual_sink</key>
-    <param>
-      <key>id</key>
-      <value>virtual_sink_4</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>stream_id</key>
-      <value>sss_phase_error_comp</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(800, 406)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>gr_complex_to_mag_squared</key>
-    <param>
-      <key>id</key>
-      <value>gr_complex_to_mag_squared_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
       <key>vlen</key>
-      <value>N_re</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(463, 559)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>parameter</key>
-    <param>
-      <key>id</key>
-      <value>decim</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value></value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>16</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>intx</value>
-    </param>
-    <param>
-      <key>short_id</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(188, 9)</value>
+      <value>(213, 117)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -234,65 +199,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(829, 108)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>variable</key>
-    <param>
-      <key>id</key>
-      <value>N_re</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>62</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(706, 14)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>parameter</key>
-    <param>
-      <key>id</key>
-      <value>avg_frames</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value></value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>intx</value>
-    </param>
-    <param>
-      <key>short_id</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(468, 10)</value>
+      <value>(480, 117)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -303,7 +210,7 @@
     <key>gr_vector_to_stream</key>
     <param>
       <key>id</key>
-      <value>gr_vector_to_stream_0_2</value>
+      <value>gr_vector_to_stream_0_0_0_0</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -311,7 +218,7 @@
     </param>
     <param>
       <key>type</key>
-      <value>float</value>
+      <value>complex</value>
     </param>
     <param>
       <key>num_items</key>
@@ -323,7 +230,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(490, 631)</value>
+      <value>(208, 189)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -331,177 +238,10 @@
     </param>
   </block>
   <block>
-    <key>fir_filter_xxx</key>
+    <key>virtual_sink</key>
     <param>
       <key>id</key>
-      <value>fir_filter_xxx_0_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>fff</value>
-    </param>
-    <param>
-      <key>decim</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>taps</key>
-      <value>-numpy.ones(N_re*avg_frames*2)/N_re/avg_frames/2</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(492, 700)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>gr_keep_m_in_n</key>
-    <param>
-      <key>id</key>
-      <value>gr_keep_m_in_n_0_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>float</value>
-    </param>
-    <param>
-      <key>m</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>n</key>
-      <value>N_re*avg_frames*2</value>
-    </param>
-    <param>
-      <key>offset</key>
-      <value>N_re*avg_frames*2-1</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(527, 782)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>gr_vector_source_x</key>
-    <param>
-      <key>id</key>
-      <value>sss_fd_vec_2</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>complex</value>
-    </param>
-    <param>
-      <key>vector</key>
-      <value>numpy.conjugate(gen_sss_fd(N_id_1,N_id_2, N_re).get_sss(slot_0_10==0))</value>
-    </param>
-    <param>
-      <key>repeat</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>vlen</key>
-      <value>N_re</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(27, 266)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>pad_source</key>
-    <param>
-      <key>id</key>
-      <value>sss_est_fd_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value>sss</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>complex</value>
-    </param>
-    <param>
-      <key>vlen</key>
-      <value>N_re</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(27, 110)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>gr_vector_source_x</key>
-    <param>
-      <key>id</key>
-      <value>sss_fd_vec_1</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>complex</value>
-    </param>
-    <param>
-      <key>vector</key>
-      <value>numpy.conjugate(gen_sss_fd(N_id_1,N_id_2, N_re).get_sss(slot_0_10!=0))</value>
-    </param>
-    <param>
-      <key>repeat</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>vlen</key>
-      <value>N_re</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(26, 186)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>virtual_source</key>
-    <param>
-      <key>id</key>
-      <value>virtual_source_3_0</value>
+      <value>virtual_sink_4_0</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -509,11 +249,11 @@
     </param>
     <param>
       <key>stream_id</key>
-      <value>sss_phase_error_comp</value>
+      <value>sss_ref_conj_fd</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(24, 624)</value>
+      <value>(647, 189)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -532,34 +272,11 @@
     </param>
     <param>
       <key>stream_id</key>
-      <value>sss_ref_fd</value>
+      <value>sss_ref_conj_fd</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(19, 464)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>virtual_source</key>
-    <param>
-      <key>id</key>
-      <value>virtual_source_0_2_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>stream_id</key>
-      <value>sss_est_fd</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(15, 396)</value>
+      <value>(14, 329)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -586,61 +303,11 @@
     </param>
     <param>
       <key>vlen</key>
-      <value>N_re</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(266, 460)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>gr_complex_to_mag</key>
-    <param>
-      <key>id</key>
-      <value>gr_complex_to_mag_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>vlen</key>
       <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(621, 342)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>const_source_x</key>
-    <param>
-      <key>id</key>
-      <value>const_source_x_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>float</value>
-    </param>
-    <param>
-      <key>const</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(606, 285)</value>
+      <value>(265, 280)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -667,61 +334,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(433, 291)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>gr_float_to_complex</key>
-    <param>
-      <key>id</key>
-      <value>gr_float_to_complex_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>vlen</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(825, 303)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>pad_sink</key>
-    <param>
-      <key>id</key>
-      <value>sss_ml</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value>ml</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>float</value>
-    </param>
-    <param>
-      <key>vlen</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(843, 635)</value>
+      <value>(418, 292)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -732,7 +345,7 @@
     <key>virtual_sink</key>
     <param>
       <key>id</key>
-      <value>virtual_sink_4_0</value>
+      <value>virtual_sink_4_1</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -740,11 +353,11 @@
     </param>
     <param>
       <key>stream_id</key>
-      <value>sss_ref_fd</value>
+      <value>sum_ph_err</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(819, 246)</value>
+      <value>(631, 290)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -752,34 +365,22 @@
     </param>
   </block>
   <block>
-    <key>parameter</key>
+    <key>virtual_source</key>
     <param>
       <key>id</key>
-      <value>N_id_1</value>
+      <value>virtual_source_0_2_1_0_0</value>
     </param>
     <param>
       <key>_enabled</key>
       <value>True</value>
     </param>
     <param>
-      <key>label</key>
-      <value></value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>134</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>intx</value>
-    </param>
-    <param>
-      <key>short_id</key>
-      <value></value>
+      <key>stream_id</key>
+      <value>sum_ph_err</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(276, 10)</value>
+      <value>(21, 386)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -787,92 +388,14 @@
     </param>
   </block>
   <block>
-    <key>parameter</key>
+    <key>gr_complex_to_mag</key>
     <param>
       <key>id</key>
-      <value>N_id_2</value>
+      <value>gr_complex_to_mag_0_0</value>
     </param>
     <param>
       <key>_enabled</key>
       <value>True</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value></value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>intx</value>
-    </param>
-    <param>
-      <key>short_id</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(364, 9)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>parameter</key>
-    <param>
-      <key>id</key>
-      <value>slot_0_10</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>label</key>
-      <value></value>
-    </param>
-    <param>
-      <key>value</key>
-      <value>1</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>intx</value>
-    </param>
-    <param>
-      <key>short_id</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(576, 10)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>gr_vector_to_stream</key>
-    <param>
-      <key>id</key>
-      <value>gr_vector_to_stream_0_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>complex</value>
-    </param>
-    <param>
-      <key>num_items</key>
-      <value>N_re</value>
     </param>
     <param>
       <key>vlen</key>
@@ -880,7 +403,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(253, 356)</value>
+      <value>(264, 399)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -888,22 +411,14 @@
     </param>
   </block>
   <block>
-    <key>gr_stream_to_vector</key>
+    <key>gr_float_to_complex</key>
     <param>
       <key>id</key>
-      <value>gr_stream_to_vector_1_0</value>
+      <value>gr_float_to_complex_0_0</value>
     </param>
     <param>
       <key>_enabled</key>
       <value>True</value>
-    </param>
-    <param>
-      <key>type</key>
-      <value>complex</value>
-    </param>
-    <param>
-      <key>num_items</key>
-      <value>N_re</value>
     </param>
     <param>
       <key>vlen</key>
@@ -911,7 +426,122 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(669, 488)</value>
+      <value>(474, 412)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>const_source_x</key>
+    <param>
+      <key>id</key>
+      <value>const_source_x_0_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>float</value>
+    </param>
+    <param>
+      <key>const</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(264, 450)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>virtual_sink</key>
+    <param>
+      <key>id</key>
+      <value>virtual_sink_4_1_0_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>stream_id</key>
+      <value>mag_ph_err</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(692, 420)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>virtual_source</key>
+    <param>
+      <key>id</key>
+      <value>virtual_source_0_2_1</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>stream_id</key>
+      <value>sum_ph_err</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(21, 517)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>virtual_source</key>
+    <param>
+      <key>id</key>
+      <value>virtual_source_0_2_1_1</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>stream_id</key>
+      <value>mag_ph_err</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(18, 568)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>gr_conjugate_cc</key>
+    <param>
+      <key>id</key>
+      <value>gr_conjugate_cc_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(419, 193)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -942,7 +572,26 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(496, 362)</value>
+      <value>(253, 525)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>gr_conjugate_cc</key>
+    <param>
+      <key>id</key>
+      <value>gr_conjugate_cc_0_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(388, 543)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -973,30 +622,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(470, 506)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>virtual_source</key>
-    <param>
-      <key>id</key>
-      <value>virtual_source_3</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>stream_id</key>
-      <value>sss_ref_fd</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(27, 568)</value>
+      <value>(620, 534)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1023,11 +649,11 @@
     </param>
     <param>
       <key>vlen</key>
-      <value>N_re</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(259, 559)</value>
+      <value>(308, 644)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1035,33 +661,10 @@
     </param>
   </block>
   <block>
-    <key>virtual_source</key>
+    <key>gr_stream_to_vector</key>
     <param>
       <key>id</key>
-      <value>virtual_source_0_0</value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>stream_id</key>
-      <value>sss_est_fd</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(21, 691)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-  </block>
-  <block>
-    <key>gr_sub_xx</key>
-    <param>
-      <key>id</key>
-      <value>gr_sub_xx_0</value>
+      <value>gr_stream_to_vector_1_0</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -1072,16 +675,178 @@
       <value>complex</value>
     </param>
     <param>
+      <key>num_items</key>
+      <value>N_re</value>
+    </param>
+    <param>
+      <key>vlen</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(478, 656)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>virtual_sink</key>
+    <param>
+      <key>id</key>
+      <value>virtual_sink_4</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>stream_id</key>
+      <value>norm_ph_err_conj</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(813, 532)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>virtual_source</key>
+    <param>
+      <key>id</key>
+      <value>virtual_source_3_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>stream_id</key>
+      <value>norm_ph_err_conj</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(19, 692)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>pad_sink</key>
+    <param>
+      <key>id</key>
+      <value>sss_ml</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>out</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>complex</value>
+    </param>
+    <param>
       <key>vlen</key>
       <value>N_re</value>
     </param>
     <param>
-      <key>num_inputs</key>
-      <value>2</value>
+      <key>_coordinate</key>
+      <value>(893, 651)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>variable</key>
+    <param>
+      <key>id</key>
+      <value>N_re</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>value</key>
+      <value>62</value>
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(300, 663)</value>
+      <value>(213, 14)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>pad_source</key>
+    <param>
+      <key>id</key>
+      <value>a_sss_est_fd_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>sss</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>complex</value>
+    </param>
+    <param>
+      <key>vlen</key>
+      <value>N_re</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(27, 110)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>pad_source</key>
+    <param>
+      <key>id</key>
+      <value>b_sss_est_fd_0_0</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>label</key>
+      <value>ref</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>complex</value>
+    </param>
+    <param>
+      <key>vlen</key>
+      <value>N_re</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(26, 183)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1089,140 +854,14 @@
     </param>
   </block>
   <connection>
-    <source_block_id>gr_interleave_1</source_block_id>
-    <sink_block_id>virtual_sink_4_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>sss_fd_vec_2</source_block_id>
-    <sink_block_id>gr_interleave_1</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>1</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>sss_fd_vec_1</source_block_id>
-    <sink_block_id>gr_interleave_1</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gr_stream_to_vector_1_0</source_block_id>
-    <sink_block_id>virtual_sink_4</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gr_repeat_0</source_block_id>
-    <sink_block_id>gr_stream_to_vector_1_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
     <source_block_id>virtual_source_0_2</source_block_id>
     <sink_block_id>gr_multiply_xx_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>1</sink_key>
   </connection>
   <connection>
-    <source_block_id>gr_complex_to_mag_squared_0</source_block_id>
-    <sink_block_id>gr_vector_to_stream_0_2</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gr_sub_xx_0</source_block_id>
-    <sink_block_id>gr_complex_to_mag_squared_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>virtual_source_3_0</source_block_id>
-    <sink_block_id>gr_multiply_xx_2</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>1</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gr_multiply_xx_2</source_block_id>
-    <sink_block_id>gr_sub_xx_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gr_vector_to_stream_0_2</source_block_id>
-    <sink_block_id>fir_filter_xxx_0_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>sss_est_fd_0</source_block_id>
-    <sink_block_id>sss_est_fd_0_1</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>fir_filter_xxx_0_0</source_block_id>
-    <sink_block_id>gr_keep_m_in_n_0_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gr_keep_m_in_n_0_0</source_block_id>
-    <sink_block_id>sss_ml</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
     <source_block_id>virtual_source_0_2_0</source_block_id>
     <sink_block_id>gr_multiply_xx_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gr_multiply_xx_0</source_block_id>
-    <sink_block_id>gr_vector_to_stream_0_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gr_vector_to_stream_0_0</source_block_id>
-    <sink_block_id>gr_integrate_xx_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gr_integrate_xx_0</source_block_id>
-    <sink_block_id>gr_complex_to_mag_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gr_complex_to_mag_0</source_block_id>
-    <sink_block_id>gr_float_to_complex_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>const_source_x_0</source_block_id>
-    <sink_block_id>gr_float_to_complex_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>1</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gr_integrate_xx_0</source_block_id>
-    <sink_block_id>gr_divide_xx_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gr_float_to_complex_0</source_block_id>
-    <sink_block_id>gr_divide_xx_0</sink_block_id>
-    <source_key>0</source_key>
-    <sink_key>1</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>gr_divide_xx_0</source_block_id>
-    <sink_block_id>gr_repeat_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -1233,9 +872,117 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
-    <source_block_id>virtual_source_0_0</source_block_id>
-    <sink_block_id>gr_sub_xx_0</sink_block_id>
+    <source_block_id>virtual_source_3_0</source_block_id>
+    <sink_block_id>gr_multiply_xx_2</sink_block_id>
     <source_key>0</source_key>
     <sink_key>1</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gr_integrate_xx_0</source_block_id>
+    <sink_block_id>virtual_sink_4_1</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>virtual_source_0_2_1</source_block_id>
+    <sink_block_id>gr_divide_xx_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>virtual_source_0_2_1_1</source_block_id>
+    <sink_block_id>gr_divide_xx_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>1</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>a_sss_est_fd_0</source_block_id>
+    <sink_block_id>gr_vector_to_stream_0_0_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>b_sss_est_fd_0_0</source_block_id>
+    <sink_block_id>gr_vector_to_stream_0_0_0_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gr_vector_to_stream_0_0_0</source_block_id>
+    <sink_block_id>sss_est_fd_0_1</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gr_vector_to_stream_0_0_0_0</source_block_id>
+    <sink_block_id>gr_conjugate_cc_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gr_conjugate_cc_0</source_block_id>
+    <sink_block_id>virtual_sink_4_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gr_multiply_xx_0</source_block_id>
+    <sink_block_id>gr_integrate_xx_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gr_float_to_complex_0_0</source_block_id>
+    <sink_block_id>virtual_sink_4_1_0_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>virtual_source_0_2_1_0_0</source_block_id>
+    <sink_block_id>gr_complex_to_mag_0_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>const_source_x_0_0</source_block_id>
+    <sink_block_id>gr_float_to_complex_0_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>1</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gr_complex_to_mag_0_0</source_block_id>
+    <sink_block_id>gr_float_to_complex_0_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gr_repeat_0</source_block_id>
+    <sink_block_id>virtual_sink_4</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gr_divide_xx_0</source_block_id>
+    <sink_block_id>gr_conjugate_cc_0_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gr_conjugate_cc_0_0</source_block_id>
+    <sink_block_id>gr_repeat_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gr_multiply_xx_2</source_block_id>
+    <sink_block_id>gr_stream_to_vector_1_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gr_stream_to_vector_1_0</source_block_id>
+    <sink_block_id>sss_ml</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
   </connection>
 </flow_graph>

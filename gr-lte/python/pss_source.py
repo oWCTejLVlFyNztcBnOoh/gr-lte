@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import numpy
-from numpy import cos, sin
+from numpy import cos, sin, pi, complex, zeros, exp
 from gnuradio import gr, window, digital
 from gnuradio.extras import block_gateway
 
@@ -14,13 +14,15 @@ class gen_pss_fd:
     else:
         root_idx = 34
 
-    pss = numpy.zeros(62,numpy.complex)
+    pss = zeros(62,complex)
     for i in range(0,31):
-        pss[i] = numpy.complex(cos(-numpy.pi*root_idx*i*(i+1)/63), sin(-numpy.pi*root_idx*i*(i+1)/63))
+        #pss[i] = complex(cos(-pi*root_idx*i*(i+1)/63), sin(-pi*root_idx*i*(i+1)/63))
+        pss[i] = exp(-1j*pi*root_idx*i*(i+1)/63)
     for i in range(31,62):
-        pss[i] = numpy.complex(cos(-numpy.pi*root_idx*(i+1)*(i+2)/63), sin(-numpy.pi*root_idx*(i+1)*(i+2)/63))
+        #pss[i] = complex(cos(-pi*root_idx*(i+1)*(i+2)/63), sin(-pi*root_idx*(i+1)*(i+2)/63))
+        pss[i] = exp(-1j*pi*root_idx*(i+1)*(i+2)/63)
 
-    pss_fd = numpy.zeros(N_re,numpy.complex)
+    pss_fd = zeros(N_re,complex)
     if Shift:
       pss_fd[1:32] = pss[31:62]
       pss_fd[N_re-31:] = pss[0:31]
